@@ -18,17 +18,29 @@ import { TodoElement } from './interfaces/do_zrobienia';
     <input [(ngModel)]="inputZnowym" (keyup.enter)="dodajTodo()"
     placeholder="Dodaj nowe todo" />
     <ul>
-      <li *ngFor="let todo of doZrobienia">
-      {{ todo.text }} | zrobione? {{ todo.isDone ? "tak" : "nie" }}
-      <input class="toggle" type="checkbox" [(ngModel)]="todo.isDone" ng-click="oznaczZrobione(todo)" />
-      <button (click)="usunTodo(todo)">Usuń te todo</button>
-    </ul>
+  <li *ngFor="let todo of doZrobienia">
+    <ng-container *ngIf="(todo.isDone && pokazWykonane) || (!todo.isDone && pokazNiewykonane)">
+      {{ todo.text }} | {{ todo.isDone ? '✅' : '❌' }}
+      <input class="toggle" type="checkbox" [(ngModel)]="todo.isDone" (click)="oznaczZrobione(todo)" />
+      <button (click)="usunTodo(todo)">Usuń to todo</button>
+    </ng-container>
+  </li>
+</ul>
 
+  <button (click)="pokazanieWykonanych()" >
+    {{ pokazWykonane ? "ukryj wykonane" : "cofnij" }}
+  </button> <br />
+  <button (click)="pokazanieNiewykonanych()" >
+    {{ pokazNiewykonane ? "ukryj niewykonane" : "cofnij" }}
+  </button> <br />
   `,
 })
 export class App {
   doZrobienia: TodoElement[] = [];
   inputZnowym: string = '';
+  pokazWykonane = true;
+  pokazNiewykonane = true;
+
   dodajTodo() {
     if (this.inputZnowym !== '') {
       const newElement: TodoElement = {
@@ -51,6 +63,14 @@ export class App {
 
   oznaczZrobione(todo: TodoElement) {
     todo.isDone = !todo.isDone;
+  }
+
+  pokazanieNiewykonanych() {
+    this.pokazNiewykonane = !this.pokazNiewykonane;
+  }
+
+  pokazanieWykonanych() {
+    this.pokazWykonane = !this.pokazWykonane;
   }
 }
 
