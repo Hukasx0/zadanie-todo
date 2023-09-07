@@ -1,5 +1,5 @@
 import 'zone.js/dist/zone';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -33,6 +33,14 @@ import { TodoElement } from './interfaces/do_zrobienia';
   <button (click)="pokazanieNiewykonanych()" >
     {{ pokazNiewykonane ? "ukryj niewykonane" : "cofnij" }}
   </button> <br />
+  <br />
+  <br />
+  <div *ngIf="zwrocWszystkie() > 0; else brak_zadan">
+    Ukończyłeś {{ procentUkonczonych() | number:'1.0-0' }}% zadań! Czyli {{ zwrocUkonczone() }}/{{ zwrocWszystkie() }}
+  </div>
+  <ng-template #brak_zadan>
+    <span>Nie masz jeszcze żadnych zadań, dodaj jakieś, np. "kup kawę"</span>
+  </ng-template>
   `,
 })
 export class App {
@@ -61,6 +69,14 @@ export class App {
     }
   }
 
+  policzWykonane(): number {
+    return this.doZrobienia.filter((todo) => todo.isDone).length;
+  }
+
+  policzWszystkie(): number {
+    return this.doZrobienia.length;
+  }
+
   oznaczZrobione(todo: TodoElement) {
     todo.isDone = !todo.isDone;
   }
@@ -71,6 +87,18 @@ export class App {
 
   pokazanieWykonanych() {
     this.pokazWykonane = !this.pokazWykonane;
+  }
+
+  zwrocUkonczone(): number {
+    return this.doZrobienia.filter((todo) => todo.isDone).length;
+  }
+
+  zwrocWszystkie(): number {
+    return this.doZrobienia.length;
+  }
+
+  procentUkonczonych(): number {
+    return (this.zwrocUkonczone() / this.zwrocWszystkie()) * 100;
   }
 }
 
