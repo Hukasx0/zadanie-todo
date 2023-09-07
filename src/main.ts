@@ -20,6 +20,8 @@ import { TodoElement } from './interfaces/do_zrobienia';
     <ul>
       <li *ngFor="let todo of doZrobienia">
       {{ todo.text }} | zrobione? {{ todo.isDone ? "tak" : "nie" }}
+      <input type="checkbox" [(ngmodel)]="todo.isDone" (change)="oznaczZrobione(todo)"
+      <button (click)="usunTodo(todo)">Usuń te todo</button>
     </ul>
 
   `,
