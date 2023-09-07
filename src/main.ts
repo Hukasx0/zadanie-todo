@@ -37,6 +37,19 @@ export class App {
       this.inputZnowym = '';
     }
   }
+
+  usunTodo(todo: TodoElement) {
+    const obecnyIndeks = this.doZrobienia.indexOf(todo);
+    if (obecnyIndeks !== -1) {
+      this.doZrobienia.splice(obecnyIndeks, 1);
+    } else {
+      alert('How did we get here?');
+    }
+  }
+
+  oznaczZrobione(todo: TodoElement) {
+    todo.isDone = !todo.isDone;
+  }
 }
 
 bootstrapApplication(App);
