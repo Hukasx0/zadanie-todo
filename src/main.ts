@@ -56,6 +56,7 @@ export class App {
         isDone: false,
       };
       this.doZrobienia.push(newElement);
+      this.zapiszDoLocalStorage();
       this.inputZnowym = '';
     }
   }
@@ -64,21 +65,15 @@ export class App {
     const obecnyIndeks = this.doZrobienia.indexOf(todo);
     if (obecnyIndeks !== -1) {
       this.doZrobienia.splice(obecnyIndeks, 1);
+      this.zapiszDoLocalStorage();
     } else {
       alert('How did we get here?');
     }
   }
 
-  policzWykonane(): number {
-    return this.doZrobienia.filter((todo) => todo.isDone).length;
-  }
-
-  policzWszystkie(): number {
-    return this.doZrobienia.length;
-  }
-
   oznaczZrobione(todo: TodoElement) {
     todo.isDone = !todo.isDone;
+    this.zapiszDoLocalStorage();
   }
 
   pokazanieNiewykonanych() {
@@ -99,6 +94,11 @@ export class App {
 
   procentUkonczonych(): number {
     return (this.zwrocUkonczone() / this.zwrocWszystkie()) * 100;
+  }
+
+  // zapisywanie do lokalnej pamięci przeglądarki, po odświeżeniu todos powinny zostać
+  private zapiszDoLocalStorage() {
+    localStorage.setItem('todos', JSON.stringify(this.doZrobienia));
   }
 }
 
