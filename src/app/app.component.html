@@ -1,0 +1,30 @@
+<h1>Dodaj nowe todos</h1>
+<input [(ngModel)]="inputZnowym" (keyup.enter)="dodajTodo()"
+placeholder="Dodaj nowe todo" />
+<ul>
+<li *ngFor="let todo of doZrobienia">
+<ng-container *ngIf="(todo.isDone && pokazWykonane) || (!todo.isDone && pokazNiewykonane)">
+  {{ todo.text }} | {{ todo.isDone ? '✅' : '❌' }}
+  <input class="toggle" type="checkbox" [(ngModel)]="todo.isDone" (click)="oznaczZrobione(todo)" />
+  <button (click)="usunTodo(todo)">Usuń to todo</button>
+</ng-container>
+</li>
+</ul>
+
+<button (click)="pokazanieWykonanych()" >
+{{ pokazWykonane ? "ukryj wykonane" : "cofnij" }}
+</button> <br />
+<button (click)="pokazanieNiewykonanych()" >
+{{ pokazNiewykonane ? "ukryj niewykonane" : "cofnij" }}
+</button> <br />
+<br />
+<br />
+<div *ngIf="zwrocWszystkie() > 0; else brak_zadan">
+  Ukończyłeś {{ procentUkonczonych() | number:'1.0-0' }}% zadań! Czyli {{ zwrocUkonczone() }}/{{ zwrocWszystkie() }}
+</div>
+<br />
+<br />
+<button (click)="eksportujJakoJson()">Eksportuj jako plik .json</button>
+<ng-template #brak_zadan>
+  <span>Nie masz jeszcze żadnych zadań, dodaj jakieś, np. "kup kawę"</span>
+</ng-template>
