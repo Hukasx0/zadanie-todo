@@ -38,6 +38,9 @@ import { TodoElement } from './interfaces/do_zrobienia';
   <div *ngIf="zwrocWszystkie() > 0; else brak_zadan">
     Ukończyłeś {{ procentUkonczonych() | number:'1.0-0' }}% zadań! Czyli {{ zwrocUkonczone() }}/{{ zwrocWszystkie() }}
   </div>
+  <br />
+  <br />
+  <button (click)="eksportujJakoJson()">Eksportuj jako plik .json</button>
   <ng-template #brak_zadan>
     <span>Nie masz jeszcze żadnych zadań, dodaj jakieś, np. "kup kawę"</span>
   </ng-template>
@@ -67,7 +70,7 @@ export class App {
       this.doZrobienia.splice(obecnyIndeks, 1);
       this.zapiszDoLocalStorage();
     } else {
-      alert('How did we get here?');
+      console.error('How did we get here?');
     }
   }
 
@@ -94,6 +97,17 @@ export class App {
 
   procentUkonczonych(): number {
     return (this.zwrocUkonczone() / this.zwrocWszystkie()) * 100;
+  }
+
+  eksportujJakoJson() {
+    const dataToExport = JSON.stringify(this.doZrobienia);
+    const blob = new Blob([dataToExport], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'backup_twoich_todos.json';
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 
   // zapisywanie do lokalnej pamięci przeglądarki, po odświeżeniu todos powinny zostać
